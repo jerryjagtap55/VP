@@ -255,6 +255,6 @@ Built by Nishant Jagtap. The sample customers and products are made up.
 
 The decisions above lean on the official docs for [React](https://react.dev), [TypeScript](https://www.typescriptlang.org/docs/), [Vite](https://vite.dev), [Express](https://expressjs.com) (especially the security and performance guides), [Tailwind CSS](https://tailwindcss.com/docs), [Vitest](https://vitest.dev), [Testing Library](https://testing-library.com) and [MDN](https://developer.mozilla.org).
 
-Use of AI tools, I used Microsoft Copilot, Claude. Planning and geathering information to help me decide on what to use, for example Tailwind vs Material UI and the proxy vs CORS. Code: Copilot wrote and suggets some of the code snippet based and helped me complete the code. Documentation: Used Claude to help me draft this README, which I reviewed and edited.
+Use of AI tools, I used Microsoft Copilot, Claude. Planning and gathering information to help me decide on what to use, for example Tailwind vs Material UI and the proxy vs CORS. Code: Copilot wrote and suggets some of the code snippet based and helped me complete the code. Used Claud to generate data for this project. Documentation: Used Claude to help me draft this README, which I reviewed and edited.
 
 This repository was written for a technical assessment and doesn't have an open source license.
