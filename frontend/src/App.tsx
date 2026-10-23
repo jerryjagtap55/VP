@@ -4,11 +4,17 @@ import { OrderDetailsDialog } from './components/OrderDetailsDialog.tsx';
 import { OrderFilters } from './components/OrderFilters.tsx';
 import { OrderTable } from './components/OrderTable.tsx';
 import { OrderTableSkeleton } from './components/OrderTableSkeleton.tsx';
+import { SummaryCards } from './components/SummaryCards.tsx';
+import { sortOrders, type OrderSort } from './utils/sortOrders.ts';
 import { useOrders } from './hooks/useOrders.ts';
 import { filterOrders, type StatusFilter } from './utils/filterOrders.ts';
 
 export default function App() {
   const { state, reload, setOrderStatus } = useOrders();
+  const [sort, setSort] = useState<OrderSort>({
+    field: 'orderDate',
+    direction: 'desc',
+  });
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -16,7 +22,10 @@ export default function App() {
   // Derived during render, not stored in state, so it can never be out of sync.
   const visibleOrders =
     state.status === 'success'
-      ? filterOrders(state.orders, { query, status: statusFilter })
+      ? sortOrders(
+          filterOrders(state.orders, { query, status: statusFilter }),
+          sort,
+        )
       : [];
 
   return (
@@ -31,11 +40,14 @@ export default function App() {
 
       {state.status === 'success' && (
         <>
+          <SummaryCards orders={state.orders} />
           <OrderFilters
             query={query}
             status={statusFilter}
             onQueryChange={setQuery}
             onStatusChange={setStatusFilter}
+            sort={sort}
+            onSortChange={setSort}
           />
           <p aria-live="polite" className="mb-2 text-sm text-gray-600">
             Showing {visibleOrders.length} of {state.orders.length} orders
