@@ -8,7 +8,7 @@ import { useOrders } from './hooks/useOrders.ts';
 import { filterOrders, type StatusFilter } from './utils/filterOrders.ts';
 
 export default function App() {
-  const { state, reload } = useOrders();
+  const { state, reload, setOrderStatus } = useOrders();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -56,6 +56,7 @@ export default function App() {
         <OrderDetailsDialog
           orderId={selectedOrderId}
           onClose={() => setSelectedOrderId(null)}
+          onStatusChanged={(order) => setOrderStatus(order.id, order.status)}
         />
       )}
     </main>

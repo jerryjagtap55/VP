@@ -1,22 +1,29 @@
-import { useEffect, useId, useRef, type MouseEvent } from 'react';
+import { useEffect, useId, useRef, useState, type MouseEvent } from 'react';
 import type { OrderDetails } from '../../../shared/api.ts';
+import type { OrderStatus } from '../../../shared/order.ts';
 import { useOrderDetails } from '../hooks/useOrderDetails.ts';
 import { formatCurrency, formatDate } from '../utils/format.ts';
 import { ErrorMessage } from './ErrorMessage.tsx';
+import { StatusActions } from './StatusActions.tsx';
 import { StatusBadge } from './StatusBadge.tsx';
 
 interface OrderDetailsDialogProps {
   orderId: string;
   onClose: () => void;
+  onStatusChanged: (order: OrderDetails) => void;
 }
 
 export function OrderDetailsDialog({
   orderId,
   onClose,
+  onStatusChanged,
 }: OrderDetailsDialogProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const statusSectionRef = useRef<HTMLElement>(null);
+  const [statusMessage, setStatusMessage] = useState('');
   const titleId = useId();
-  const { state, reload } = useOrderDetails(orderId);
+  const { state, reload, changeStatus, isUpdating, updateError } =
+    useOrderDetails(orderId);
 
   // Open as a modal once mounted. The check avoids a second showModal() when
   // StrictMode runs this effect twice in development.
@@ -31,6 +38,16 @@ export function OrderDetailsDialog({
   // which fires the native "close" event and so calls onClose exactly once.
   function closeDialog() {
     dialogRef.current?.close();
+  }
+  async function handleChangeStatus(newStatus: OrderStatus) {
+    setStatusMessage('');
+    const updatedOrder = await changeStatus(newStatus);
+    if (updatedOrder) {
+      setStatusMessage(`Status updated to ${updatedOrder.status}.`);
+      onStatusChanged(updatedOrder);
+    }
+    // The clicked button may no longer exist, so keep keyboard focus in a known place.
+    statusSectionRef.current?.focus();
   }
 
   function handleBackdropClick(event: MouseEvent<HTMLDialogElement>) {
@@ -77,7 +94,25 @@ export function OrderDetailsDialog({
         )}
 
         {state.status === 'success' && (
-          <OrderDetailsContent order={state.order} />
+          <>
+            <OrderDetailsContent order={state.order} />
+            <section
+              ref={statusSectionRef}
+              tabIndex={-1}
+              aria-label="Update status"
+              className="mt-6 space-y-3 focus:outline-none"
+            >
+              <StatusActions
+                currentStatus={state.order.status}
+                isUpdating={isUpdating}
+                onChangeStatus={handleChangeStatus}
+              />
+              <p role="status" className="text-sm text-green-700">
+                {statusMessage}
+              </p>
+              {updateError && <ErrorMessage message={updateError} />}
+            </section>
+          </>
         )}
       </div>
     </dialog>

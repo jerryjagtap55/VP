@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { OrderDetails } from '../../../shared/api.ts';
+import type { OrderStatus } from '../../../shared/order.ts';
 import { ApiError, getErrorMessage } from '../api/client.ts';
-import { fetchOrder } from '../api/orders.ts';
+import { fetchOrder, updateOrderStatus } from '../api/orders.ts';
 
 type OrderDetailsState =
   | { status: 'loading' }
@@ -12,6 +13,8 @@ type OrderDetailsState =
 export function useOrderDetails(orderId: string) {
   const [state, setState] = useState<OrderDetailsState>({ status: 'loading' });
   const [reloadCount, setReloadCount] = useState(0);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   useEffect(() => {
     let ignore = false;
@@ -46,5 +49,23 @@ export function useOrderDetails(orderId: string) {
     setReloadCount((count) => count + 1);
   }
 
-  return { state, reload };
+  // Pessimistic update: the screen changes only after the API confirms.
+  async function changeStatus(
+    newStatus: OrderStatus,
+  ): Promise<OrderDetails | null> {
+    setIsUpdating(true);
+    setUpdateError(null);
+    try {
+      const updatedOrder = await updateOrderStatus(orderId, newStatus);
+      setState({ status: 'success', order: updatedOrder });
+      return updatedOrder;
+    } catch (error) {
+      setUpdateError(getErrorMessage(error));
+      return null;
+    } finally {
+      setIsUpdating(false);
+    }
+  }
+
+  return { state, reload, changeStatus, isUpdating, updateError };
 }

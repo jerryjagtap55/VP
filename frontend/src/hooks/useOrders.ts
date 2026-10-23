@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import type { OrderStatus } from '../../../shared/order.ts';
 import type { OrderSummary } from '../../../shared/api.ts';
 import { getErrorMessage } from '../api/client.ts';
 import { fetchOrders } from '../api/orders.ts';
@@ -40,5 +41,19 @@ export function useOrders() {
     setReloadCount((count) => count + 1);
   }
 
-  return { state, reload };
+  // Called after the API confirms a change, so the list matches the server.
+  function setOrderStatus(orderId: string, status: OrderStatus) {
+    setState((current) =>
+      current.status === 'success'
+        ? {
+            ...current,
+            orders: current.orders.map((order) =>
+              order.id === orderId ? { ...order, status } : order,
+            ),
+          }
+        : current,
+    );
+  }
+
+  return { state, reload, setOrderStatus };
 }
