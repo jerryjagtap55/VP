@@ -1,0 +1,20 @@
+{
+  "name": "vp",
+  "scripts": {
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerryjagtap55/VP.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jerryjagtap55/VP/issues"
+  },
+  "homepage": "https://github.com/jerryjagtap55/VP#readme",
+  "private": true,
+  "devDependencies": {
+    "prettier": "3.9.10"
+  }
+}
