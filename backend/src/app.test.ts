@@ -74,6 +74,15 @@ describe('PATCH /orders/:id', () => {
     assert.equal(response.body.error.code, 'VALIDATION_ERROR');
   });
 
+  it('rejects a body larger than the 10 KB limit', async () => {
+    const response = await request(app)
+      .patch('/orders/ORD-1012')
+      .send({ status: 'Processing', padding: 'x'.repeat(20_000) });
+
+    assert.equal(response.status, 413);
+    assert.equal(response.body.error.code, 'PAYLOAD_TOO_LARGE');
+  });
+
   it('returns 404 when the order does not exist', async () => {
     const response = await request(app)
       .patch('/orders/ORD-9999')

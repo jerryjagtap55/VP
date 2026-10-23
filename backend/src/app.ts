@@ -7,7 +7,9 @@ export const app = express();
 
 app.disable('x-powered-by');
 app.use(helmet());
-app.use(express.json());
+
+// A status update is tiny; rejecting large bodies early protects the server.
+app.use(express.json({ limit: '10kb' }));
 
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });

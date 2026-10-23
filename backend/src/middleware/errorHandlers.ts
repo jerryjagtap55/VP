@@ -28,6 +28,14 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     return;
   }
 
+  // Thrown by express.json() when the body is over the configured limit.
+  if (isRecord(err) && err.type === 'entity.too.large') {
+    res
+      .status(413)
+      .json(errorBody('PAYLOAD_TOO_LARGE', 'Request body is too large'));
+    return;
+  }
+
   console.error(err);
   res
     .status(500)
