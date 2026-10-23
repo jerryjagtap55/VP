@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ErrorMessage } from './components/ErrorMessage.tsx';
 import { OrderDetailsDialog } from './components/OrderDetailsDialog.tsx';
 import { OrderFilters } from './components/OrderFilters.tsx';
-import { OrderTable } from './components/OrderTable.tsx';
+import { OrderList } from './components/OrderList.tsx';
 import { OrderTableSkeleton } from './components/OrderTableSkeleton.tsx';
 import { SummaryCards } from './components/SummaryCards.tsx';
 import { sortOrders, type OrderSort } from './utils/sortOrders.ts';
@@ -29,7 +29,7 @@ export default function App() {
       : [];
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
+    <main className="mx-auto max-w-5xl p-4 sm:p-6">
       <h1 className="mb-6 text-2xl font-bold">Order Management Dashboard</h1>
 
       {state.status === 'loading' && <OrderTableSkeleton />}
@@ -52,7 +52,7 @@ export default function App() {
           <p aria-live="polite" className="mb-2 text-sm text-gray-600">
             Showing {visibleOrders.length} of {state.orders.length} orders
           </p>
-          <OrderTable
+          <OrderList
             orders={visibleOrders}
             onViewDetails={setSelectedOrderId}
             emptyMessage={

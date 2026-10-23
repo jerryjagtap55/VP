@@ -5,22 +5,9 @@ import { StatusBadge } from './StatusBadge.tsx';
 interface OrderTableProps {
   orders: OrderSummary[];
   onViewDetails: (orderId: string) => void;
-  emptyMessage?: string;
 }
 
-export function OrderTable({
-  orders,
-  onViewDetails,
-  emptyMessage = 'There are no orders yet.',
-}: OrderTableProps) {
-  if (orders.length === 0) {
-    return (
-      <p className="rounded-lg border border-dashed border-gray-300 p-8 text-center text-gray-600">
-        {emptyMessage}
-      </p>
-    );
-  }
-
+export function OrderTable({ orders, onViewDetails }: OrderTableProps) {
   return (
     <div className="overflow-x-auto rounded-lg border border-gray-200">
       <table className="min-w-full divide-y divide-gray-200 text-left text-sm">

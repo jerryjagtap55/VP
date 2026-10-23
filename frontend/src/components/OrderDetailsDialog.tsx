@@ -39,6 +39,7 @@ export function OrderDetailsDialog({
   function closeDialog() {
     dialogRef.current?.close();
   }
+
   async function handleChangeStatus(newStatus: OrderStatus) {
     setStatusMessage('');
     const updatedOrder = await changeStatus(newStatus);
@@ -63,9 +64,9 @@ export function OrderDetailsDialog({
       aria-labelledby={titleId}
       onClose={onClose}
       onClick={handleBackdropClick}
-      className="m-auto w-full max-w-2xl rounded-lg p-0 shadow-xl backdrop:bg-gray-900/50"
+      className="m-auto w-[calc(100%-2rem)] max-w-2xl rounded-lg p-0 shadow-xl backdrop:bg-gray-900/50"
     >
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="mb-4 flex items-start justify-between gap-4">
           <h2 id={titleId} className="text-lg font-semibold">
             Order {orderId}
@@ -139,7 +140,36 @@ function OrderDetailsContent({ order }: { order: OrderDetails }) {
         </div>
       </dl>
 
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
+      {/* Phones: stacked rows, so every amount is visible without scrolling sideways. */}
+      <div className="sm:hidden">
+        <ul
+          aria-label={`Items in order ${order.id}`}
+          className="divide-y divide-gray-100 rounded-lg border border-gray-200"
+        >
+          {order.items.map((item) => (
+            <li
+              key={item.productId}
+              className="flex justify-between gap-3 p-3 text-sm"
+            >
+              <div>
+                <p className="font-medium">{item.productName}</p>
+                <p className="text-gray-600 tabular-nums">
+                  {item.quantity} × {formatCurrency(item.unitPrice)}
+                </p>
+              </div>
+              <p className="font-medium whitespace-nowrap tabular-nums">
+                {formatCurrency(item.lineTotal)}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2 flex justify-between px-3 text-sm font-semibold">
+          <span>Order total</span>
+          <span className="tabular-nums">{formatCurrency(order.total)}</span>
+        </p>
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-lg border border-gray-200 sm:block">
         <table className="min-w-full divide-y divide-gray-200 text-left text-sm">
           <caption className="sr-only">Items in order {order.id}</caption>
           <thead className="bg-gray-50 text-gray-700">
