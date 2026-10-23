@@ -1,1 +1,10 @@
 @import 'tailwindcss';
+
+/* The app is light-only for now, so this tells the browser not to apply a dark theme. */
+@layer base {
+  html {
+    color-scheme: light;
+    background-color: #f9fafb;
+    color: #111827;
+  }
+}
