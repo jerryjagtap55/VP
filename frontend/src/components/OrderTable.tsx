@@ -4,11 +4,13 @@ import { StatusBadge } from './StatusBadge.tsx';
 
 interface OrderTableProps {
   orders: OrderSummary[];
+  onViewDetails: (orderId: string) => void;
   emptyMessage?: string;
 }
 
 export function OrderTable({
   orders,
+  onViewDetails,
   emptyMessage = 'There are no orders yet.',
 }: OrderTableProps) {
   if (orders.length === 0) {
@@ -40,6 +42,9 @@ export function OrderTable({
             <th scope="col" className="px-4 py-3 text-right font-semibold">
               Total
             </th>
+            <th scope="col" className="px-4 py-3">
+              <span className="sr-only">Actions</span>
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100 bg-white">
@@ -57,6 +62,16 @@ export function OrderTable({
               </td>
               <td className="px-4 py-3 text-right whitespace-nowrap tabular-nums">
                 {formatCurrency(order.total)}
+              </td>
+              <td className="px-4 py-3 text-right">
+                <button
+                  type="button"
+                  onClick={() => onViewDetails(order.id)}
+                  aria-label={`View details for order ${order.id}`}
+                  className="rounded px-2 py-1 font-medium text-blue-700 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-blue-600"
+                >
+                  View
+                </button>
               </td>
             </tr>
           ))}

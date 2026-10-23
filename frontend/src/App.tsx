@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ErrorMessage } from './components/ErrorMessage.tsx';
+import { OrderDetailsDialog } from './components/OrderDetailsDialog.tsx';
 import { OrderFilters } from './components/OrderFilters.tsx';
 import { OrderTable } from './components/OrderTable.tsx';
 import { OrderTableSkeleton } from './components/OrderTableSkeleton.tsx';
@@ -10,6 +11,7 @@ export default function App() {
   const { state, reload } = useOrders();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('All');
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   // Derived during render, not stored in state, so it can never be out of sync.
   const visibleOrders =
@@ -40,6 +42,7 @@ export default function App() {
           </p>
           <OrderTable
             orders={visibleOrders}
+            onViewDetails={setSelectedOrderId}
             emptyMessage={
               state.orders.length > 0
                 ? 'No orders match your search and filter.'
@@ -47,6 +50,13 @@ export default function App() {
             }
           />
         </>
+      )}
+
+      {selectedOrderId !== null && (
+        <OrderDetailsDialog
+          orderId={selectedOrderId}
+          onClose={() => setSelectedOrderId(null)}
+        />
       )}
     </main>
   );
