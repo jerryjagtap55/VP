@@ -4,10 +4,55 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>Order Management Dashboard</title>
+    <!--
+      Inline styles for the loading shell below. They must not depend on Tailwind,
+      because in development the stylesheet only arrives with the JavaScript.
+    -->
+    <style>
+      .app-shell {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 1.5rem;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+      }
+      .app-shell h1 {
+        margin: 0 0 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 2rem;
+      }
+      .app-shell-row {
+        height: 1rem;
+        margin: 0 0 1.5rem;
+        border-radius: 0.25rem;
+        background: #e5e7eb;
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .app-shell-row {
+          animation: app-shell-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+      }
+      @keyframes app-shell-pulse {
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Shown until React renders; React clears this on its first render. -->
+      <div class="app-shell" role="status">
+        <h1>Order Management Dashboard</h1>
+        <div class="app-shell-row"></div>
+        <div class="app-shell-row"></div>
+        <div class="app-shell-row"></div>
+        <div class="app-shell-row"></div>
+        <div class="app-shell-row"></div>
+        <div class="app-shell-row"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

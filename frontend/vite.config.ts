@@ -9,5 +9,13 @@ export default defineConfig({
       // Allow importing ../shared; files outside the repo are still blocked.
       allow: ['..'],
     },
+    proxy: {
+      // /api/orders -> http://localhost:3000/orders (same origin for the browser, so no CORS).
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 });
