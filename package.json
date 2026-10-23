@@ -2,7 +2,8 @@
   "name": "vp",
   "scripts": {
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "test": "npm test --prefix backend && npm test --prefix frontend"
   },
   "repository": {
     "type": "git",
