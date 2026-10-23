@@ -1,7 +1,14 @@
+import { ALLOWED_TRANSITIONS, ORDER_STATUSES } from '../../shared/order.ts';
+
 export default function App() {
   return (
-    <h1 className="p-4 text-3xl font-bold text-emerald-700 md:text-5xl">
-      Order Management Dashboard
-    </h1>
+    <ul className="space-y-2 p-6">
+      {ORDER_STATUSES.map((status) => (
+        <li key={status}>
+          <strong>{status}</strong> →{' '}
+          {ALLOWED_TRANSITIONS[status].join(', ') || 'no changes allowed'}
+        </li>
+      ))}
+    </ul>
   );
 }
